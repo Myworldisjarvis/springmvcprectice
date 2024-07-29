@@ -4,19 +4,64 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import springmvc.model.User;
+
 @Controller
 public class ContactController {
 
+	@ModelAttribute
+	public void commonDataForModel(Model m) {
+		m.addAttribute("Header", "Wellcome To ShopStar");
+		m.addAttribute("Desc", "This is a register form");
+		
+	}
+	
+	
 	@RequestMapping("/contact")
 	public String showForm() {
 		return "contact";
 	}
 	
-//	**************This is a old Tarika using servlet and annotations ( but ham ise bhi use kar sakate hai )***************
+	
+	
+//	(3) this is the more unique way using @ModelAttribute  (transfer daynamic data view to controller and controller to view)
+	@RequestMapping(path="/processform" , method = RequestMethod.POST)
+	public String hendelForm(@ModelAttribute User user , Model model) {	
+		return "success";
+			}
+	
+
+		
+	/*
+	//	(2) This is a lengthy way to view to controller and controller to view
+	@RequestMapping(path="/processform" , method = RequestMethod.POST)
+	public String hendelForm(
+			@RequestParam("email") String uEmail,
+			@RequestParam("name") String uName,
+			@RequestParam("password") String uPassword , Model model)  {
+
+		User user =new User();
+		user.setName(uName);
+		user.setEmail(uEmail);
+		user.setPassword(uPassword);
+		
+		System.out.println(user);
+		model.addAttribute("user",user);
+		
+//		System.out.println(uEmail +" "+ uName +" "+ uPassword);
+//		model.addAttribute("email" , uEmail);
+//		model.addAttribute("name" , uName);
+//		model.addAttribute("password" , uPassword);
+		return "success";
+	}
+	*/
+	
+//	(1) **************This is a old Tarika using servlet and annotations ( but ham ise bhi use kar sakate hai )***************
 //	@RequestMapping(path="/processform" , method = RequestMethod.POST)
 //	public String hendelForm(HttpServletRequest request) {
 //		
@@ -28,20 +73,8 @@ public class ContactController {
 //		System.out.println(email+" "+name +" "+ password);
 //		return "contact";
 //	}
+		
 	
-	
-	
-	@RequestMapping(path="/processform" , method = RequestMethod.POST)
-	public String hendelForm(
-			@RequestParam("email") String uEmail,
-			@RequestParam("name") String uName,
-			@RequestParam("password") String uPassword , Model model)  {
 
-		System.out.println(uEmail +" "+ uName +" "+ uPassword);
-		model.addAttribute("email" , uEmail);
-		model.addAttribute("name" , uName);
-		model.addAttribute("password" , uPassword);
-		return "success";
-	}
 	
 }
