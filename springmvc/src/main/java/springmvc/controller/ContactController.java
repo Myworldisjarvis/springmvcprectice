@@ -40,9 +40,13 @@ public class ContactController {
 	@RequestMapping(path="/processform" , method = RequestMethod.POST)
 	public String hendelForm(@ModelAttribute User user , Model model) {	
 		
+		
+//		if user name is blank then redirect to return contact form 
+		if(user.getName().isBlank()) {
+			return "redirect:/contact";
+		}
+		
 		this.userService.createUser(user);	
-		
-		
 		return "success";
 			}
 	
